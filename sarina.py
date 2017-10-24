@@ -19,8 +19,8 @@ async def on_ready():
 @client.event
 ###all of my conditions for messages that trigger different functions
 async def on_message(message):
-    #l = dir(message)
-    #print(l)
+    # l = dir(message)
+    # print(l)
     #print(message.author)
     if not message.author.bot:
         if message.content.startswith('~test'):
@@ -33,7 +33,9 @@ async def on_message(message):
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
-                await client.send_file(message.channel, getSubredditPictureNSFW(message.content[3:]))
+                channelName = message.channel.name
+                print(channelName)
+                await client.send_file(message.channel, getSubredditPictureNSFW(channelName, message.content[3:]))
             else:
                 await client.send_file(message.channel, getSubredditPicture(message.content[3:]))
         ###owl attack
@@ -43,6 +45,12 @@ async def on_message(message):
             #await asyncio.sleep(.5)
             try:
                 await client.send_file(message.channel, getSubredditPicture('superbowl'))
+            except Exception as e:
+                await client.send_message(message.channel, ':shrug:')
+        ###awwnime
+        elif message.content.startswith('~aww'):
+            try:
+                await client.send_file(message.channel, getSubredditPicture('awwnime'))
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
@@ -112,10 +120,53 @@ def getSubredditPicture(subreddit="", nsfw=False):
         print(e)
         return ':shrug:'
 
+def getSubredditPictureSpecific(subreddit = '', nsfw=False):
+    try:
+        replyMessage = ':shrug:'
+        if subreddit != '':
+            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
+            post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
+            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+            redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
+            
+            if redditAuthResult['access_token']:
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+                maxReTries = 3
+                gettingPicture = True
+                while gettingPicture and maxReTries > 0:
+                    redditApiResult = json.loads(requests.get('https://reddit.com/r/' + subreddit + '/random.json', headers=requestHeaders2).text)
+                    if isinstance(redditApiResult, dict):
+                        randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
+                        redditApiResult = redditApiResult['data']['children'][randomInt]['data']
+                    else:
+                        redditApiResult = redditApiResult[0]['data']['children'][0]['data']
+                        if 'poop' not in redditApiResult['title'].lower() \
+                            and redditApiResult['score'] > 10:
+                            # and redditApiResult['domain'].lower() in imageDomains:
+                                if nsfw is False and redditApiResult['over_18'] is False:
+                                    gettingPicture = False
+                                elif nsfw is True:
+                                    gettingPicture = False
+                        maxReTries = maxReTries - 1
+                if not gettingPicture:
+                    replyMessage = redditApiResult['url'].replace('amp;', '')
+                    print(replyMessage)
+                    fileName = replyMessage.split('/')[-1]
+                    requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/SFW/' + subreddit + '/' + fileName, 'wb')
+                    imageFile.write(imageResponse.content)
+                    imageFile.close()
+        return 'imgs/SFW/' + subreddit + '/' + fileName
+    except Exception as e:
+        print('Error in getSubredditPicture method:')
+        print(e)
+        return ':shrug:'
+
 
     ###NSFW
 
-def getSubredditPictureNSFW(subreddit="", nsfw=True):
+def getSubredditPictureNSFW( channelName, subreddit="",nsfw=True):
     try:
         replyMessage = ':shrug:'
         if subreddit != '':
@@ -146,12 +197,14 @@ def getSubredditPictureNSFW(subreddit="", nsfw=True):
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     fileName = replyMessage.split('/')[-1]
+                    print(replyMessage)
+                    print(fileName)
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/NSFW/' + fileName, 'wb')
+                    imageFile = open('imgs/NSFW/' + channelName + '/' + fileName, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/NSFW/' + fileName    
+        return 'imgs/NSFW/' + channelName + '/' + fileName    
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
