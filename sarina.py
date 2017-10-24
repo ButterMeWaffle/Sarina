@@ -58,6 +58,8 @@ async def on_message(message):
             await client.send_message(message.channel, 'Fuck you too')
         elif 'jack sparrow' in message.content:
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
+        elif 'love you' in message.content or 'love sarina' in message.content or 'love this bot' in message.content:
+            await client.send_message(message.channel, '***Captain*** Jack Sparrow')
 
 
         ###for explosion
