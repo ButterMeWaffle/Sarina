@@ -4,6 +4,8 @@ import requests
 import json
 import random
 import time
+from io import BytesIO
+import urllib.request
 
 client = discord.Client()
 
@@ -36,9 +38,13 @@ async def on_message(message):
                 await client.send_message(message.channel, getSubredditPicture(message.content[3:]))
         ###owl attack
         elif message.content.startswith('~owl'):
+            
             await client.send_message(message.channel, 'OWL ATTACK')
-            #time.sleep(.5)
-            await client.send_message(message.channel, getSubredditPicture('superbowl'))
+            #await asyncio.sleep(.5)
+            try:
+                await client.send_file(message.channel, getSubredditPicture('superbowl'))
+            except Exception as e:
+                await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
         elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
             await client.send_message(message.channel, 'Would you like to hear a story?')
@@ -91,7 +97,13 @@ def getSubredditPicture(subreddit="", nsfw=False):
                         maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-        return replyMessage
+                    fileName = replyMessage.split('/')[-1]
+                    requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/SFW/' + fileName, 'wb')
+                    imageFile.write(imageResponse.content)
+                    imageFile.close()
+        return 'imgs/SFW/' + fileName
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
@@ -130,7 +142,14 @@ def getSubredditPictureNSFW(subreddit="", nsfw=True):
                         maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-        return replyMessage     
+                    replyMessage = redditApiResult['url'].replace('amp;', '')
+                    fileName = replyMessage.split('/')[-1]
+                    requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/NSFW/' + fileName, 'wb')
+                    imageFile.write(imageResponse.content)
+                    imageFile.close()
+        return 'imgs/NSFW/' + fileName    
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
