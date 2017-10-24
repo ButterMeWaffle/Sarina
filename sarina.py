@@ -33,9 +33,9 @@ async def on_message(message):
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
             if message.channel.name == "nsfw":
-                await client.send_message(message.channel, getSubredditPictureNSFW(message.content[3:]))
+                await client.send_file(message.channel, getSubredditPictureNSFW(message.content[3:]))
             else:
-                await client.send_message(message.channel, getSubredditPicture(message.content[3:]))
+                await client.send_file(message.channel, getSubredditPicture(message.content[3:]))
         ###owl attack
         elif message.content.startswith('~owl'):
             
