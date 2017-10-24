@@ -32,7 +32,7 @@ async def on_message(message):
             await client.edit_message(tmp, 'You have {} messages.'.format(counter))
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
-            if message.channel.name == "nsfw":
+            if message.channel.name == "nsfw" or message.channel.name == "gayboys":
                 await client.send_file(message.channel, getSubredditPictureNSFW(message.content[3:]))
             else:
                 await client.send_file(message.channel, getSubredditPicture(message.content[3:]))
