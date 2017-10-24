@@ -97,6 +97,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
                         maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
+                    print(replyMessage)
                     fileName = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
@@ -141,7 +142,6 @@ def getSubredditPictureNSFW(subreddit="", nsfw=True):
                                     gettingPicture = False
                         maxReTries = maxReTries - 1
                 if not gettingPicture:
-                    replyMessage = redditApiResult['url'].replace('amp;', '')
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     fileName = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
