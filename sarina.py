@@ -6,6 +6,7 @@ import random
 import time
 from io import BytesIO
 import urllib.request
+import os
 
 client = discord.Client()
 
@@ -34,20 +35,22 @@ async def on_message(message):
         elif message.content.startswith('~r'):
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
                 channelName = message.channel.name
-                returnMessage = getSubredditPictureNSFW(channelName,(message.content[3:]))
+                returnMessage = await getSubredditPictureNSFW(channelName,(message.content[3:]))
                 await client.send_file(message.channel, returnMessage)
                 os.remove(returnMessage)
             else:
-                returnMessage = getSubredditPicture(channelName,(message.content[3:]))
+                returnMessage = await getSubredditPicture(channelName,(message.content[3:]))
                 await client.send_file(message.channel, returnMessage)
                 os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
             try:
                 returnMessage = getSubredditPictureSpecific('superbowl')
+                print(returnMessage)
                 await client.send_file(message.channel, returnMessage)
                 os.remove(returnMessage)
             except Exception as e:
+                print(e)
                 await client.send_message(message.channel, ':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
@@ -130,7 +133,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
         print(e)
         return ':shrug:'
 
-async def getSubredditPictureSpecific(subreddit = '', nsfw=True):
+def getSubredditPictureSpecific(subreddit = '', nsfw=True):
     try:
         print(subreddit)
         replyMessage = ':shrug:'
@@ -150,10 +153,8 @@ async def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                         print('if isinstance')
                         randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
                         redditApiResult = redditApiResult['data']['children'][randomInt]['data']
-                        print(redditApiResult)
                     else:
                         print('else ')
-                        print(redditApiResult)
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
                     if 'poop' not in redditApiResult['title'].lower() \
                         and redditApiResult['score'] > 10:
@@ -169,10 +170,11 @@ async def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                     fileName = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open(fileName, 'wb')
+                    imageFile = open('imgs/SFW/' + subreddit + '/' + fileName, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return fileName
+                    print('imgs/' + fileName)
+        return 'imgs/SFW/' + subreddit + '/' + fileName
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
