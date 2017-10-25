@@ -218,10 +218,10 @@ def getSubredditPictureNSFW( channelName, subreddit="",nsfw=True):
                     print(fileName)
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/NSFW/' + channelName + '/' + fileName, 'wb')
+                    imageFile = open('imgs/NSFW/' + fileName, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/NSFW/' + channelName + '/' + fileName    
+        return 'imgs/NSFW/' + fileName    
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
