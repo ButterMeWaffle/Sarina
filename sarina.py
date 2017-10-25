@@ -34,20 +34,25 @@ async def on_message(message):
         elif message.content.startswith('~r'):
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
                 channelName = message.channel.name
-                print(channelName)
-                await client.send_file(message.channel, getSubredditPictureNSFW(channelName, message.content[3:]))
+                returnMessage = getSubredditPictureNSFW(channelName,(message.content[3:]))
+                await client.send_file(message.channel, returnMessage)
+                os.remove(returnMessage)
             else:
-                await client.send_file(message.channel, getSubredditPicture(message.content[3:]))
+                returnMessage = getSubredditPicture(channelName,(message.content[3:]))
+                await client.send_file(message.channel, returnMessage)
+                os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
             try:
-                await client.send_file(message.channel, getSubredditPictureSpecific('superbowl'))
+                returnMessage = getSubredditPictureSpecific('superbowl')
+                await client.send_file(message.channel, returnMessage)
+                os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
             try:
-                await client.send_message(message.channel, getSubredditPictureSpecific('awwnime'))
+                await client.send_file(message.channel, getSubredditPictureSpecific('awwnime'))
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
@@ -100,14 +105,14 @@ def getSubredditPicture(subreddit="", nsfw=False):
                     else:
                         print('else fired')
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
-                        if 'poop' not in redditApiResult['title'].lower() \
-                            and redditApiResult['score'] > 10:
-                            # and redditApiResult['domain'].lower() in imageDomains:
-                                if nsfw is False and redditApiResult['over_18'] is False:
-                                    gettingPicture = False
-                                elif nsfw is True:
-                                    gettingPicture = False
-                        maxReTries = maxReTries - 1
+                    if 'poop' not in redditApiResult['title'].lower() \
+                        and redditApiResult['score'] > 10:
+                        # and redditApiResult['domain'].lower() in imageDomains:
+                            if nsfw is True and redditApiResult['over_18'] is True:
+                                gettingPicture = False
+                            elif nsfw is True:
+                                gettingPicture = False
+                    maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     if replyMessage == ":shrug:":
@@ -125,8 +130,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
         print(e)
         return ':shrug:'
 
-def getSubredditPictureSpecific(subreddit = '', nsfw=True):
-    
+async def getSubredditPictureSpecific(subreddit = '', nsfw=True):
     try:
         print(subreddit)
         replyMessage = ':shrug:'
@@ -151,24 +155,24 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                         print('else ')
                         print(redditApiResult)
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
-                        if 'poop' not in redditApiResult['title'].lower() \
-                            and redditApiResult['score'] > 10:
-                            # and redditApiResult['domain'].lower() in imageDomains:
-                                if nsfw is True and redditApiResult['over_18'] is True:
-                                    gettingPicture = False
-                                elif nsfw is True:
-                                    gettingPicture = False
-                        maxReTries = maxReTries - 1
+                    if 'poop' not in redditApiResult['title'].lower() \
+                        and redditApiResult['score'] > 10:
+                        # and redditApiResult['domain'].lower() in imageDomains:
+                            if nsfw is True and redditApiResult['over_18'] is True:
+                                gettingPicture = False
+                            elif nsfw is True:
+                                gettingPicture = False
+                    maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     print(replyMessage)
                     fileName = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/SFW/' + subreddit + '/' + fileName, 'wb')
+                    imageFile = open(fileName, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/SFW/' + subreddit + '/' + fileName
+        return fileName
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
@@ -197,14 +201,14 @@ def getSubredditPictureNSFW( channelName, subreddit="",nsfw=True):
                         redditApiResult = redditApiResult['data']['children'][randomInt]['data']
                     else:
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
-                        if 'poop' not in redditApiResult['title'].lower() \
-                            and redditApiResult['score'] > 10:
-                            # and redditApiResult['domain'].lower() in imageDomains:
-                                if nsfw is False and redditApiResult['over_18'] is False:
-                                    gettingPicture = False
-                                elif nsfw is True:
-                                    gettingPicture = False
-                        maxReTries = maxReTries - 1
+                    if 'poop' not in redditApiResult['title'].lower() \
+                        and redditApiResult['score'] > 10:
+                        # and redditApiResult['domain'].lower() in imageDomains:
+                            if nsfw is True and redditApiResult['over_18'] is True:
+                                gettingPicture = False
+                            elif nsfw is True:
+                                gettingPicture = False
+                    maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     fileName = replyMessage.split('/')[-1]
