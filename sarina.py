@@ -34,19 +34,18 @@ async def on_message(message):
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
-                channelName = message.channel.name
-                returnMessage = await getSubredditPictureNSFW(channelName,(message.content[3:]))
+                
+                returnMessage = getSubredditPictureNSFW(message.content[3:])
                 await client.send_file(message.channel, returnMessage)
                 os.remove(returnMessage)
             else:
-                returnMessage = await getSubredditPicture(channelName,(message.content[3:]))
+                returnMessage = getSubredditPicture(message.content[3:])
                 await client.send_file(message.channel, returnMessage)
                 os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
             try:
                 returnMessage = getSubredditPictureSpecific('superbowl')
-                print(returnMessage)
                 await client.send_file(message.channel, returnMessage)
                 os.remove(returnMessage)
             except Exception as e:
@@ -84,29 +83,23 @@ async def on_message(message):
     ###SFW
 def getSubredditPicture(subreddit="", nsfw=False):
     try:
+        print(subreddit)
         replyMessage = ':shrug:'
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
-            print('right before auth result')
             if redditAuthResult['access_token']:
-                print('aftr auth result')
                 requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
                 maxReTries = 3
                 gettingPicture = True
-                
                 while gettingPicture and maxReTries > 0:
                     redditApiResult = json.loads(requests.get('https://reddit.com/r/' + subreddit + '/random.json', headers=requestHeaders2).text)
-                    print('apiresult')
-                    print(maxReTries)
                     if isinstance(redditApiResult, dict):
                         randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
                         redditApiResult = redditApiResult['data']['children'][randomInt]['data']
-                        print("api result")
                     else:
-                        print('else fired')
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
                     if 'poop' not in redditApiResult['title'].lower() \
                         and redditApiResult['score'] > 10:
@@ -118,8 +111,6 @@ def getSubredditPicture(subreddit="", nsfw=False):
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-                    if replyMessage == ":shrug:":
-                        return replyMessage
                     print(replyMessage)
                     fileName = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
@@ -142,7 +133,6 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
-            
             if redditAuthResult['access_token']:
                 requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
                 maxReTries = 3
@@ -150,11 +140,9 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                 while gettingPicture and maxReTries > 0:
                     redditApiResult = json.loads(requests.get('https://reddit.com/r/' + subreddit + '/random.json', headers=requestHeaders2).text)
                     if isinstance(redditApiResult, dict):
-                        print('if isinstance')
                         randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
                         redditApiResult = redditApiResult['data']['children'][randomInt]['data']
                     else:
-                        print('else ')
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
                     if 'poop' not in redditApiResult['title'].lower() \
                         and redditApiResult['score'] > 10:
@@ -173,7 +161,6 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                     imageFile = open('imgs/SFW/' + subreddit + '/' + fileName, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-                    print('imgs/' + fileName)
         return 'imgs/SFW/' + subreddit + '/' + fileName
     except Exception as e:
         print('Error in getSubredditPicture method:')
@@ -183,7 +170,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
 
     ###NSFW
 
-def getSubredditPictureNSFW( channelName, subreddit="",nsfw=True):
+def getSubredditPictureNSFW(subreddit="",nsfw=True):
     try:
         replyMessage = ':shrug:'
         if subreddit != '':
