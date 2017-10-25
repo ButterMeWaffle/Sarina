@@ -40,17 +40,14 @@ async def on_message(message):
                 await client.send_file(message.channel, getSubredditPicture(message.content[3:]))
         ###owl attack
         elif message.content.startswith('~owl'):
-            
-            await client.send_message(message.channel, 'OWL ATTACK')
-            #await asyncio.sleep(.5)
             try:
-                await client.send_file(message.channel, getSubredditPicture('superbowl'))
+                await client.send_file(message.channel, getSubredditPictureSpecific('superbowl'))
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
             try:
-                await client.send_file(message.channel, getSubredditPicture('awwnime'))
+                await client.send_message(message.channel, getSubredditPictureSpecific('awwnime'))
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
@@ -85,17 +82,23 @@ def getSubredditPicture(subreddit="", nsfw=False):
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
-            
+            print('right before auth result')
             if redditAuthResult['access_token']:
+                print('aftr auth result')
                 requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
                 maxReTries = 3
                 gettingPicture = True
+                
                 while gettingPicture and maxReTries > 0:
                     redditApiResult = json.loads(requests.get('https://reddit.com/r/' + subreddit + '/random.json', headers=requestHeaders2).text)
+                    print('apiresult')
+                    print(maxReTries)
                     if isinstance(redditApiResult, dict):
                         randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
                         redditApiResult = redditApiResult['data']['children'][randomInt]['data']
+                        print("api result")
                     else:
+                        print('else fired')
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
                         if 'poop' not in redditApiResult['title'].lower() \
                             and redditApiResult['score'] > 10:
@@ -107,6 +110,8 @@ def getSubredditPicture(subreddit="", nsfw=False):
                         maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
+                    if replyMessage == ":shrug:":
+                        return replyMessage
                     print(replyMessage)
                     fileName = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
@@ -120,8 +125,10 @@ def getSubredditPicture(subreddit="", nsfw=False):
         print(e)
         return ':shrug:'
 
-def getSubredditPictureSpecific(subreddit = '', nsfw=False):
+def getSubredditPictureSpecific(subreddit = '', nsfw=True):
+    
     try:
+        print(subreddit)
         replyMessage = ':shrug:'
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
@@ -136,14 +143,18 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=False):
                 while gettingPicture and maxReTries > 0:
                     redditApiResult = json.loads(requests.get('https://reddit.com/r/' + subreddit + '/random.json', headers=requestHeaders2).text)
                     if isinstance(redditApiResult, dict):
+                        print('if isinstance')
                         randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
                         redditApiResult = redditApiResult['data']['children'][randomInt]['data']
+                        print(redditApiResult)
                     else:
+                        print('else ')
+                        print(redditApiResult)
                         redditApiResult = redditApiResult[0]['data']['children'][0]['data']
                         if 'poop' not in redditApiResult['title'].lower() \
                             and redditApiResult['score'] > 10:
                             # and redditApiResult['domain'].lower() in imageDomains:
-                                if nsfw is False and redditApiResult['over_18'] is False:
+                                if nsfw is True and redditApiResult['over_18'] is True:
                                     gettingPicture = False
                                 elif nsfw is True:
                                     gettingPicture = False
