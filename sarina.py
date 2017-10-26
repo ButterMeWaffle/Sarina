@@ -71,7 +71,7 @@ async def on_message(message):
         elif 'jack sparrow' in message.content:
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
         elif 'love you' in message.content or 'love sarina' in message.content or 'love this bot' in message.content:
-            await client.send_message(message.channel, '***Captain*** Jack Sparrow')
+            await client.send_message(message.channel, 'Love you too')
 
 
         ###for explosion
@@ -104,9 +104,9 @@ def getSubredditPicture(subreddit="", nsfw=False):
                     if 'poop' not in redditApiResult['title'].lower() \
                         and redditApiResult['score'] > 10:
                         # and redditApiResult['domain'].lower() in imageDomains:
-                            if nsfw is True and redditApiResult['over_18'] is True:
+                            if nsfw is False and redditApiResult['over_18'] is False:
                                 gettingPicture = False
-                            elif nsfw is True:
+                            elif nsfw is False:
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
