@@ -52,15 +52,24 @@ async def on_message(message):
         elif message.content.startswith('~owl'):
             try:
                 returnMessage = getSubredditPictureSpecific('superbowl')
-                await client.send_file(message.channel, returnMessage)
-                os.remove(returnMessage)
+                print(returnMessage)
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
             except Exception as e:
                 print(e)
                 await client.send_message(message.channel, ':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
             try:
-                await client.send_file(message.channel, getSubredditPictureSpecific('awwnime'))
+                returnMessage = getSubredditPictureSpecific('awwnime')
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
@@ -122,12 +131,8 @@ def getSubredditPicture(subreddit="", nsfw=False):
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
-                    print(nsfw)
-                    print(redditApiResult['over_18'])
-                    print(gettingPicture)
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
-                    print(replyMessage)
                     replyMessage = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
@@ -170,15 +175,19 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
+                    print(nsfw)
+                    print(redditApiResult['over_18'])
+                    print(gettingPicture)
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-                    print(replyMessage)
-                    fileName = replyMessage.split('/')[-1]
+                    imageResponse = redditApiResult['url'].replace('amp;', '')
+                    replyMessage = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
-                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/SFW/' + subreddit + '/' + fileName, 'wb')
+                    imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/SFW/' + subreddit + '/' + replyMessage, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/SFW/' + subreddit + '/' + fileName
+                    replyMessage = 'imgs/SFW/' + subreddit + '/' + replyMessage
+        return replyMessage
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
@@ -216,12 +225,8 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
-                    print(nsfw)
-                    print(redditApiResult['over_18'])
-                    print(gettingPicture)
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
-                    print(replyMessage)
                     replyMessage = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                     imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
