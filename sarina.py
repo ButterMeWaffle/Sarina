@@ -24,8 +24,9 @@ async def on_message(message):
     # print(l)
     #print(message.author)
     if not message.author.bot:
-        await client.send_typing(message.channel)
+        
         if message.content.startswith('~test'):
+            await client.send_typing(message.channel)
             counter = 0
             tmp = await client.send_message(message.channel, 'Calculating messages...')
             async for log in client.logs_from(message.channel, limit=100):
@@ -34,6 +35,7 @@ async def on_message(message):
             await client.edit_message(tmp, 'You have {} messages.'.format(counter))
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
+            await client.send_typing(message.channel)
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
                 
                 returnMessage = getSubredditPictureNSFW(message.content[3:])
@@ -51,6 +53,7 @@ async def on_message(message):
                     os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
+            await client.send_typing(message.channel)
             try:
                 returnMessage = getSubredditPictureSpecific('superbowl')
                 print(returnMessage)
@@ -64,6 +67,7 @@ async def on_message(message):
                 await client.send_message(message.channel, ':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
+            await client.send_typing(message.channel)
             try:
                 returnMessage = getSubredditPictureSpecific('awwnime')
                 if returnMessage == ":shrug:":
@@ -75,24 +79,33 @@ async def on_message(message):
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
         elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Would you like to hear a story?')
             for line in TragedyIndeed :
+                await client.send_typing(message.channel)
                 await client.send_message(message.channel, line)
                 await asyncio.sleep(1)
         ###Some random funny commands
         elif 'test' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'TEST REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
         elif 'fuck you' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Fuck you too')
         elif 'jack sparrow' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
         elif 'love you' in message.content or 'love sarina' in message.content or 'love this bot' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Love you too')
         elif 'bad bot' in message.content or 'bad sarina' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, "I'm sorry D:")
         elif 'good bot' in message.content or 'good sarina' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, "Thanks :) <3")
         elif 'thanks bot' in message.content or 'thanks sarina' in message.content or 'thanks sarina!' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, "You're welcome :)")
 
 
