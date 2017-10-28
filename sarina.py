@@ -24,6 +24,7 @@ async def on_message(message):
     # print(l)
     #print(message.author)
     if not message.author.bot:
+        await client.send_typing(message.channel)
         if message.content.startswith('~test'):
             counter = 0
             tmp = await client.send_message(message.channel, 'Calculating messages...')
