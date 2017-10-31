@@ -77,6 +77,18 @@ async def on_message(message):
                     os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
+        ###EarthPorn
+        elif message.content.startswith('~ep'):
+            await client.send_typing(message.channel)
+            try:
+                returnMessage = getSubredditPictureSpecific('earthporn')
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
+            except Exception as e:
+                await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
         elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
             await client.send_typing(message.channel)
