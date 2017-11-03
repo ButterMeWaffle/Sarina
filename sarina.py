@@ -16,6 +16,13 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    checkAndMakeFolders()
+
+# check and add urls as needed to save imgs
+def checkAndMakeFolders():
+    for url in pathList:
+        if not os.path.exists(url):
+            os.makedirs(url)
 
 @client.event
 ###all of my conditions for messages that trigger different functions
@@ -222,5 +229,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
 
 TragedyIndeed = [' **The Senate** - Did you ever hear the Tragedy of Darth Plagueis the Wise?', ' **Bitch Boy** - No.',' **The Senate** - I thought not.', ' **The Senate** - It’s not a story the Jedi would tell you.', ' **The Senate** - It’s a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side, he could even keep the ones he cared about from dying.', ' **Bitch Boy** - He could actually...save people from death?', ' **The Senate** - The dark side of the Force is a pathway to many abilities some consider to be unnatural.', ' **Bitch Boy** - What happened to him?', ' **The Senate** - He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did.', ' **The Senate** - Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself.', ' **Bitch Boy** - Is it possible to learn this power?', ' **The Senate** - Not from a Jedi.']
 
+# list of paths to create at start of program
+pathList = ['imgs/', 'imgs/NSFW','imgs/NSFW/nsfw', 'imgs/NSFW/gayboys', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime']
 
 client.run('MzYzMjk4ODM0MjM2ODMzNzkz.DM-b8Q.Kjo_CUbsxR7QCG6goDyTGfTci0g')
