@@ -31,7 +31,9 @@ async def on_message(message):
     # print(l)
     #print(message.author)
     if not message.author.bot:
+        
         if message.content.startswith('~test'):
+            await client.send_typing(message.channel)
             counter = 0
             tmp = await client.send_message(message.channel, 'Calculating messages...')
             async for log in client.logs_from(message.channel, limit=100):
@@ -40,45 +42,90 @@ async def on_message(message):
             await client.edit_message(tmp, 'You have {} messages.'.format(counter))
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
+            await client.send_typing(message.channel)
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
                 
                 returnMessage = getSubredditPictureNSFW(message.content[3:])
-                await client.send_file(message.channel, returnMessage)
-                os.remove(returnMessage)
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
             else:
                 returnMessage = getSubredditPicture(message.content[3:])
-                await client.send_file(message.channel, returnMessage)
-                os.remove(returnMessage)
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
+            await client.send_typing(message.channel)
             try:
                 returnMessage = getSubredditPictureSpecific('superbowl')
-                await client.send_file(message.channel, returnMessage)
-                os.remove(returnMessage)
+                print(returnMessage)
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
             except Exception as e:
                 print(e)
                 await client.send_message(message.channel, ':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
+            await client.send_typing(message.channel)
             try:
-                await client.send_file(message.channel, getSubredditPictureSpecific('awwnime'))
+                returnMessage = getSubredditPictureSpecific('awwnime')
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
+            except Exception as e:
+                await client.send_message(message.channel, ':shrug:')
+        ###EarthPorn
+        elif message.content.startswith('~ep'):
+            await client.send_typing(message.channel)
+            try:
+                returnMessage = getSubredditPictureSpecific('earthporn')
+                if returnMessage == ":shrug:":
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
         elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Would you like to hear a story?')
             for line in TragedyIndeed :
+                await client.send_typing(message.channel)
                 await client.send_message(message.channel, line)
                 await asyncio.sleep(1)
         ###Some random funny commands
         elif 'test' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'TEST REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
         elif 'fuck you' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Fuck you too')
         elif 'jack sparrow' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
         elif 'love you' in message.content or 'love sarina' in message.content or 'love this bot' in message.content:
+            await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Love you too')
+        elif 'bad bot' in message.content or 'bad sarina' in message.content:
+            await client.send_typing(message.channel)
+            await client.send_message(message.channel, "I'm sorry D:")
+        elif 'good bot' in message.content or 'good sarina' in message.content:
+            await client.send_typing(message.channel)
+            await client.send_message(message.channel, "Thanks :) <3")
+        elif 'thanks bot' in message.content or 'thanks sarina' in message.content or 'thanks sarina!' in message.content:
+            await client.send_typing(message.channel)
+            await client.send_message(message.channel, "You're welcome :)")
 
 
         ###for explosion
@@ -113,19 +160,20 @@ def getSubredditPicture(subreddit="", nsfw=False):
                         # and redditApiResult['domain'].lower() in imageDomains:
                             if nsfw is False and redditApiResult['over_18'] is False:
                                 gettingPicture = False
-                            elif nsfw is False:
+                            elif nsfw is True:
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-                    print(replyMessage)
-                    fileName = replyMessage.split('/')[-1]
+                    imageResponse = redditApiResult['url'].replace('amp;', '')
+                    replyMessage = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
-                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/SFW/' + fileName, 'wb')
+                    imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/SFW/' + replyMessage, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/SFW/' + fileName
+                    replyMessage = 'imgs/SFW/' + replyMessage
+        return replyMessage
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
@@ -154,21 +202,25 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                     if 'poop' not in redditApiResult['title'].lower() \
                         and redditApiResult['score'] > 10:
                         # and redditApiResult['domain'].lower() in imageDomains:
-                            if nsfw is True and redditApiResult['over_18'] is True:
+                            if nsfw is False and redditApiResult['over_18'] is False:
                                 gettingPicture = False
                             elif nsfw is True:
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
+                    print(nsfw)
+                    print(redditApiResult['over_18'])
+                    print(gettingPicture)
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-                    print(replyMessage)
-                    fileName = replyMessage.split('/')[-1]
+                    imageResponse = redditApiResult['url'].replace('amp;', '')
+                    replyMessage = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
-                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/SFW/' + subreddit + '/' + fileName, 'wb')
+                    imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/SFW/' + subreddit + '/' + replyMessage, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/SFW/' + subreddit + '/' + fileName
+                    replyMessage = 'imgs/SFW/' + subreddit + '/' + replyMessage
+        return replyMessage
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
@@ -207,15 +259,15 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
-                    fileName = replyMessage.split('/')[-1]
-                    print(replyMessage)
-                    print(fileName)
+                    imageResponse = redditApiResult['url'].replace('amp;', '')
+                    replyMessage = replyMessage.split('/')[-1]
                     requestHeaders = {'User-agent': 'linux:Sarina:v1'}
-                    imageResponse = requests.get(replyMessage, headers=requestHeaders, stream=True)
-                    imageFile = open('imgs/NSFW/' + fileName, 'wb')
+                    imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
+                    imageFile = open('imgs/NSFW/' + replyMessage, 'wb')
                     imageFile.write(imageResponse.content)
                     imageFile.close()
-        return 'imgs/NSFW/' + fileName    
+                    replyMessage = 'imgs/NSFW/' + replyMessage
+        return replyMessage   
     except Exception as e:
         print('Error in getSubredditPicture method:')
         print(e)
