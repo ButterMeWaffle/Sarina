@@ -4,3 +4,5 @@
 imgs/NSFW/nsfw/*.*
 imgs/NSFW/gaybros/*.*
 imgs/SFW/*.*
+imgs/SFW/**
+imgs/SFW/**/*.*
