@@ -81,7 +81,8 @@ async def on_message(message):
                     await client.send_message(message.channel, returnMessage)
                 else: 
                     await client.send_file(message.channel, returnMessage)
-                    os.remove(returnMessage)
+                    # dont remove aww pics
+                    # os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###EarthPorn
@@ -93,7 +94,8 @@ async def on_message(message):
                     await client.send_message(message.channel, returnMessage)
                 else: 
                     await client.send_file(message.channel, returnMessage)
-                    os.remove(returnMessage)
+                    # dont remove ep pics
+                    # os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
