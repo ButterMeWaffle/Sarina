@@ -178,6 +178,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
+                    print(replyMessage)
                     if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv':
                         return replyMessage
                     else:
@@ -228,6 +229,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                     print(gettingPicture)
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
+                    print(replyMessage)
                     if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv':
                         return replyMessage
                     else:
@@ -278,6 +280,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
+                    print(replyMessage)
                     if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv':
                         return replyMessage
                     else:
