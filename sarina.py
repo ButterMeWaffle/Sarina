@@ -112,32 +112,35 @@ async def on_message(message):
         ###NSFW
         elif message.content.startswith('~nsfw'):
             await client.send_typing(message.channel)
-            try:
-                subreddit = nsfwSubs[random.randint(0, len(nsfwSubs))]
-                print(subreddit)
-                returnMessage = getSubredditPictureNSFW(subreddit)
-                if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
-                else: 
-                    await client.send_file(message.channel, returnMessage)
-                    # dont remove ep pics
-                    # os.remove(returnMessage)
-            except Exception as e:
-                await client.send_message(message.channel, ':shrug:')
+            if message.channel.name == "nsfw":
+                try:
+                    subreddit = nsfwSubs[random.randint(0, len(nsfwSubs))]
+                    print(subreddit)
+                    returnMessage = getSubredditPictureNSFW(subreddit)
+                    if not returnMessage.startswith('imgs'):
+                        await client.send_message(message.channel, returnMessage)
+                    else: 
+                        await client.send_file(message.channel, returnMessage)
+                        # dont remove ep pics
+                        # os.remove(returnMessage)
+                except Exception as e:
+                    await client.send_message(message.channel, ':shrug:')
         elif message.content.startswith('~lewd'):
+           
             await client.send_typing(message.channel)
-            try:
-                subreddit = lewd[random.randint(0, len(lewd))]
-                print(subreddit)
-                returnMessage = getSubredditPictureLewd(subreddit)
-                if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
-                else: 
-                    await client.send_file(message.channel, returnMessage)
-                    # dont remove ep pics
-                    # os.remove(returnMessage)
-            except Exception as e:
-                await client.send_message(message.channel, ':shrug:')
+            if message.channel.name == "nsfw":
+                try:
+                    subreddit = lewd[random.randint(0, len(lewd))]
+                    print(subreddit)
+                    returnMessage = getSubredditPictureLewd(subreddit)
+                    if not returnMessage.startswith('imgs'):
+                        await client.send_message(message.channel, returnMessage)
+                    else: 
+                        await client.send_file(message.channel, returnMessage)
+                        # dont remove ep pics
+                        # os.remove(returnMessage)
+                except Exception as e:
+                    await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
         elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
             await client.send_typing(message.channel)
