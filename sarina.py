@@ -1,4 +1,5 @@
 import discord
+from random import uniform
 import asyncio
 import requests
 import json
@@ -100,6 +101,22 @@ async def on_message(message):
             await client.send_typing(message.channel)
             try:
                 returnMessage = getSubredditPictureSpecific('earthporn')
+                if not returnMessage.startswith('imgs'):
+                    await client.send_message(message.channel, returnMessage)
+                else: 
+                    await client.send_file(message.channel, returnMessage)
+                    # dont remove ep pics
+                    # os.remove(returnMessage)
+            except Exception as e:
+                await client.send_message(message.channel, ':shrug:')
+        ###NSFW
+        elif message.content.startswith('~nsfw'):
+            await client.send_typing(message.channel)
+            try:
+                print(random.randint(1,11))
+                subreddit = nsfwSubs[random.randint(0, len(nsfwSubs))]
+                print(subreddit)
+                returnMessage = getSubredditPictureNSFW(subreddit)
                 if not returnMessage.startswith('imgs'):
                     await client.send_message(message.channel, returnMessage)
                 else: 
@@ -307,5 +324,9 @@ TragedyIndeed = [' **The Senate** - Did you ever hear the Tragedy of Darth Plagu
 
 # list of paths to create at start of program
 pathList = ['imgs/', 'imgs/NSFW','imgs/NSFW/nsfw', 'imgs/NSFW/gayboys', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime']
+
+nsfwSubs = ['nsfw', 'realgirls', 'nsfw_gif', 'Blowjob', 'Blowjobs', 'blowjobsandwich', 'boobies', 'collegesluts', 'DillionHarper', 'dirtysmall', 'dreamjobs', 'festivalsluts', 'funsized', 'girlskissing', 'porninfifteenseconds','RemyLaCroix', 'RileyReid', 'xsome']
+
+lewd = ['ecchi', 'hentai', 'yuri']
 
 client.run('MzYzMjk4ODM0MjM2ODMzNzkz.DM-b8Q.Kjo_CUbsxR7QCG6goDyTGfTci0g')
