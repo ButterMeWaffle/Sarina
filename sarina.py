@@ -129,7 +129,7 @@ async def on_message(message):
             try:
                 subreddit = lewd[random.randint(0, len(lewd))]
                 print(subreddit)
-                returnMessage = getSubredditPictureNSFW(subreddit)
+                returnMessage = getSubredditPictureLewd(subreddit)
                 if not returnMessage.startswith('imgs'):
                     await client.send_message(message.channel, returnMessage)
                 else: 
@@ -254,12 +254,8 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                                 gettingPicture = False
                     maxReTries = maxReTries - 1
                 if not gettingPicture:
-                    print(nsfw)
-                    print(redditApiResult['over_18'])
-                    print(gettingPicture)
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
-                    print(replyMessage)
                     if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv':
                         return replyMessage
                     else:
@@ -327,6 +323,53 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
         print(e)
         return ':shrug:'
 
+def getSubredditPictureLewd(subreddit = '', nsfw=True):
+    try:
+        print(subreddit)
+        replyMessage = ':shrug:'
+        if subreddit != '':
+            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
+            post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
+            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+            redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
+            if redditAuthResult['access_token']:
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+                maxReTries = 3
+                gettingPicture = True
+                while gettingPicture and maxReTries > 0:
+                    redditApiResult = json.loads(requests.get('https://reddit.com/r/' + subreddit + '/random.json', headers=requestHeaders2).text)
+                    if isinstance(redditApiResult, dict):
+                        randomInt = random.randint(0, len(redditApiResult['data']['children']) - 1)
+                        redditApiResult = redditApiResult['data']['children'][randomInt]['data']
+                    else:
+                        redditApiResult = redditApiResult[0]['data']['children'][0]['data']
+                    if 'poop' not in redditApiResult['title'].lower() \
+                        and redditApiResult['score'] > 10:
+                        # and redditApiResult['domain'].lower() in imageDomains:
+                            if nsfw is True and redditApiResult['over_18'] is True:
+                                gettingPicture = False
+                            elif nsfw is True:
+                                gettingPicture = False
+                    maxReTries = maxReTries - 1
+                if not gettingPicture:
+                    replyMessage = redditApiResult['url'].replace('amp;', '')
+                    imageResponse = redditApiResult['url'].replace('amp;', '')
+                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv':
+                        return replyMessage
+                    else:
+                        replyMessage = replyMessage.split('/')[-1]
+                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                        imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
+                        imageFile = open('imgs/NSFW/lewd/' + replyMessage, 'wb')
+                        imageFile.write(imageResponse.content)
+                        imageFile.close()
+                        replyMessage = 'imgs/NSFW/lewd/' + replyMessage
+        return replyMessage
+    except Exception as e:
+        print('Error in getSubredditPicture method:')
+        print(e)
+        return ':shrug:'
+
 ###end reddit posts
 
 ###funny random stuff
@@ -336,7 +379,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
 TragedyIndeed = [' **The Senate** - Did you ever hear the Tragedy of Darth Plagueis the Wise?', ' **Bitch Boy** - No.',' **The Senate** - I thought not.', ' **The Senate** - It’s not a story the Jedi would tell you.', ' **The Senate** - It’s a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side, he could even keep the ones he cared about from dying.', ' **Bitch Boy** - He could actually...save people from death?', ' **The Senate** - The dark side of the Force is a pathway to many abilities some consider to be unnatural.', ' **Bitch Boy** - What happened to him?', ' **The Senate** - He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did.', ' **The Senate** - Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself.', ' **Bitch Boy** - Is it possible to learn this power?', ' **The Senate** - Not from a Jedi.']
 
 # list of paths to create at start of program
-pathList = ['imgs/', 'imgs/NSFW','imgs/NSFW/nsfw', 'imgs/NSFW/gayboys', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime']
+pathList = ['imgs/', 'imgs/NSFW','imgs/NSFW/nsfw', 'imgs/NSFW/gayboys', 'imgs/NSFW/lewd', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime']
 
 nsfwSubs = ['nsfw', 'realgirls', 'nsfw_gif', 'Blowjob', 'Blowjobs', 'blowjobsandwich', 'boobies', 'collegesluts', 'DillionHarper', 'dirtysmall', 'dreamjobs', 'festivalsluts', 'funsized', 'girlskissing', 'porninfifteenseconds','RemyLaCroix', 'RileyReid', 'xsome']
 
