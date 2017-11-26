@@ -11,6 +11,8 @@ import os
 from urllib.parse import urlparse
 from os.path import splitext
 
+token = "Bot_Token"
+
 client = discord.Client()
 
 @client.event
@@ -159,16 +161,16 @@ async def on_message(message):
         elif 'jack sparrow' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
-        elif 'love you' in message.content or 'love sarina' in message.content or 'love this bot' in message.content:
+        elif 'love you' in message.content or 'love botName' in message.content or 'love this bot' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Love you too')
-        elif 'bad bot' in message.content or 'bad sarina' in message.content:
+        elif 'bad bot' in message.content or 'bad botName' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, "I'm sorry D:")
-        elif 'good bot' in message.content or 'good sarina' in message.content:
+        elif 'good bot' in message.content or 'good botName' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, "Thanks :) <3")
-        elif 'thanks bot' in message.content or 'thanks sarina' in message.content or 'thanks sarina!' in message.content:
+        elif 'thanks bot' in message.content or 'thanks botName' in message.content or 'thanks botName!' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, "You're welcome :)")
 
@@ -187,10 +189,10 @@ def getSubredditPicture(subreddit="", nsfw=False):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -216,7 +218,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                        requestHeaders = {'User-agent': 'linux:botName:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/SFW/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -235,10 +237,10 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -263,7 +265,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                        requestHeaders = {'User-agent': 'linux:botName:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/SFW/' + subreddit + '/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -284,11 +286,11 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -314,7 +316,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                        requestHeaders = {'User-agent': 'linux:botName:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/NSFW/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -333,10 +335,10 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/thewafflekingg)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -361,7 +363,7 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
+                        requestHeaders = {'User-agent': 'linux:botName:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/NSFW/lewd/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -387,4 +389,4 @@ nsfwSubs = ['nsfw', 'realgirls', 'nsfw_gif', 'Blowjob', 'Blowjobs', 'blowjobsand
 lewd = ['ecchi', 'hentai', 'yuri']
 
 # now lets run it
-client.run('MzYzMjk4ODM0MjM2ODMzNzkz.DM-b8Q.Kjo_CUbsxR7QCG6goDyTGfTci0g')
+client.run(token)

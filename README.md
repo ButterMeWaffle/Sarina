@@ -1,5 +1,8 @@
 My Discord bot
 
+before trying to run and install you must replace the value of token at the top of the file with YOUR token. 
+You must replace all refferences of redditUser and botName with your bots name and reddit user name.
+
 to run do the following (REQUIRES python 3.6)
 
 1 - cd to the file
