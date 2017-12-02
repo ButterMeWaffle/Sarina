@@ -44,14 +44,9 @@ async def on_message(message):
     #print(message.author)
     if not message.author.bot:
         
-        if message.content.startswith('~test'):
+        if message.content.startswith('~request'):
             await client.send_typing(message.channel)
-            counter = 0
-            tmp = await client.send_message(message.channel, 'Calculating messages...')
-            async for log in client.logs_from(message.channel, limit=100):
-                if log.author == message.author:
-                    counter += 1
-            await client.edit_message(tmp, 'You have {} messages.'.format(counter))
+            client.send_message(message.content[3:])
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
             await client.send_typing(message.channel)
