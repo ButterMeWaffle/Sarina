@@ -128,13 +128,13 @@ async def on_message(message):
         elif message.content.startswith('~xmas'):
             await client.send_typing(message.channel)
             try:
-                returnMessage = getSubredditPictureSpecific('ChristmasLights')
+                returnMessage = getSubredditPictureSpecific('christmas')
                 if not returnMessage.startswith('imgs'):
                     await client.send_message(message.channel, returnMessage)
                 else: 
                     await client.send_file(message.channel, returnMessage)
                     # remove pics
-                    # os.remove(returnMessage)
+                    os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
         ###NSFW
@@ -149,8 +149,8 @@ async def on_message(message):
                         await client.send_message(message.channel, returnMessage)
                     else: 
                         await client.send_file(message.channel, returnMessage)
-                        # dont remove ep pics
-                        # os.remove(returnMessage)
+                        # remove pics
+                        os.remove(returnMessage)
                 except Exception as e:
                     await client.send_message(message.channel, ':shrug:')
         elif message.content.startswith('~lewd'):
@@ -166,7 +166,7 @@ async def on_message(message):
                     else: 
                         await client.send_file(message.channel, returnMessage)
                         # dont remove ep pics
-                        # os.remove(returnMessage)
+                        os.remove(returnMessage)
                 except Exception as e:
                     await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
@@ -413,7 +413,7 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
 TragedyIndeed = [' **The Senate** - Did you ever hear the Tragedy of Darth Plagueis the Wise?', ' **Bitch Boy** - No.',' **The Senate** - I thought not.', ' **The Senate** - It’s not a story the Jedi would tell you.', ' **The Senate** - It’s a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side, he could even keep the ones he cared about from dying.', ' **Bitch Boy** - He could actually...save people from death?', ' **The Senate** - The dark side of the Force is a pathway to many abilities some consider to be unnatural.', ' **Bitch Boy** - What happened to him?', ' **The Senate** - He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did.', ' **The Senate** - Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself.', ' **Bitch Boy** - Is it possible to learn this power?', ' **The Senate** - Not from a Jedi.']
 
 # list of paths to create at start of program
-pathList = ['imgs/', 'imgs/NSFW','imgs/NSFW/nsfw', 'imgs/NSFW/gayboys', 'imgs/NSFW/lewd', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime', 'imgs/SFW/ChristmasLights', 'imgs/SFW/birb']
+pathList = ['imgs/', 'imgs/NSFW','imgs/NSFW/nsfw', 'imgs/NSFW/gayboys', 'imgs/NSFW/lewd', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime', 'imgs/SFW/christmas', 'imgs/SFW/birb']
 
 # list of subreddits to choose from for random commands
 nsfwSubs = ['nsfw', 'realgirls', 'nsfw_gif', 'Blowjob', 'Blowjobs', 'blowjobsandwich', 'boobies', 'collegesluts', 'DillionHarper', 'dirtysmall', 'dreamjobs', 'festivalsluts', 'funsized', 'girlskissing', 'porninfifteenseconds','RemyLaCroix', 'RileyReid', 'xsome']
