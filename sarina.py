@@ -186,7 +186,7 @@ async def on_message(message):
             await client.send_message(message.channel, 'TEST REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
         elif 'fuck you' in message.content:
             await client.send_typing(message.channel)
-            await client.send_message(message.channel, 'Fuck you too')
+            await client.send_file(message.channel, 'imgs/smug.jpg')
         elif 'jack sparrow' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
