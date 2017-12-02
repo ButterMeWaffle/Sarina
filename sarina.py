@@ -63,6 +63,7 @@ async def on_message(message):
                     await client.send_message(message.channel, returnMessage)
                 else: 
                     await client.send_file(message.channel, returnMessage)
+                    # remove pics
                     os.remove(returnMessage)
             else:
                 returnMessage = getSubredditPicture(message.content[3:])
@@ -70,6 +71,7 @@ async def on_message(message):
                     await client.send_message(message.channel, returnMessage)
                 else: 
                     await client.send_file(message.channel, returnMessage)
+                    # remove pics
                     os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
@@ -81,6 +83,7 @@ async def on_message(message):
                     await client.send_message(message.channel, returnMessage)
                 else: 
                     await client.send_file(message.channel, returnMessage)
+                    # remove pics
                     os.remove(returnMessage)
             except Exception as e:
                 print(e)
@@ -124,7 +127,7 @@ async def on_message(message):
                     os.remove(returnMessage)
             except Exception as e:
                 await client.send_message(message.channel, ':shrug:')
-        ###xmas
+        ###xmas / temp?
         elif message.content.startswith('~xmas'):
             await client.send_typing(message.channel)
             try:
@@ -165,7 +168,7 @@ async def on_message(message):
                         await client.send_message(message.channel, returnMessage)
                     else: 
                         await client.send_file(message.channel, returnMessage)
-                        # dont remove ep pics
+                        # remove pics
                         os.remove(returnMessage)
                 except Exception as e:
                     await client.send_message(message.channel, ':shrug:')
