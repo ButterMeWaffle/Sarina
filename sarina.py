@@ -13,6 +13,8 @@ from os.path import splitext
 
 token = "Bot_Token"
 
+authToken = ""
+
 client = discord.Client()
 
 @client.event
@@ -216,7 +218,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
         print(subreddit)
         replyMessage = ':shrug:'
         if subreddit != '':
-            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
+            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
@@ -264,7 +266,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
         print(subreddit)
         replyMessage = ':shrug:'
         if subreddit != '':
-            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
+            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
@@ -313,7 +315,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
     try:
         replyMessage = ':shrug:'
         if subreddit != '':
-            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
+            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
@@ -362,7 +364,7 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
         print(subreddit)
         replyMessage = ':shrug:'
         if subreddit != '':
-            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', 'WeFYWSVicZPiW6bT077bpWkNpH8')
+            client_auth = requests.auth.HTTPBasicAuth('BBJOcC2GtlKsYQ', authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
             requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
