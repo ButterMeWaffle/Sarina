@@ -246,7 +246,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
                     print(replyMessage)
-                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.html':
+                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.mp4' or get_ext(replyMessage) == '.html':
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
@@ -293,7 +293,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
-                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.html':
+                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.mp4' or get_ext(replyMessage) == '.html':
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
@@ -344,7 +344,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
                     print(replyMessage)
-                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.html':
+                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.mp4' or get_ext(replyMessage) == '.html':
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
@@ -391,7 +391,7 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
                 if not gettingPicture:
                     replyMessage = redditApiResult['url'].replace('amp;', '')
                     imageResponse = redditApiResult['url'].replace('amp;', '')
-                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.html':
+                    if get_ext(replyMessage) == '' or get_ext(replyMessage) == '.gifv' or get_ext(replyMessage) == '.mp4' or get_ext(replyMessage) == '.html':
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
