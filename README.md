@@ -1,4 +1,4 @@
-My Discord bot
+##My Discord bot
 
 before trying to run and install you must replace the value of token at the top of the file with YOUR token. 
 You must replace all refferences of redditUser and botName with your bots name and reddit user name.
@@ -14,6 +14,10 @@ to run do the following (REQUIRES python 3.6)
 
 4 - run -- py -3 sarina.py
 
+
+###ToDo
+1. add timmer to random reply commands (prevent spam)
+2. add weather command based on city/zip
 
 
 **There are some "weird" commands on here. A few are per request. If you have any commands you would like requested just submit and issue and I will see what I can do. There is a line. Nothing illegal**
