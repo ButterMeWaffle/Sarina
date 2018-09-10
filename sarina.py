@@ -11,10 +11,10 @@ import os
 from urllib.parse import urlparse
 from os.path import splitext
 
-token = "Bot_Token"
+token = "token"
 
-authToken = ""
-appId = ""
+authToken = "authToken"
+appId = "-appId"
 
 client = discord.Client()
 
@@ -46,8 +46,14 @@ async def on_message(message):
     # print(l)
     #print(message.author)
     if not message.author.bot:
-        
+        ### send all request to the request channel
         if message.content.startswith('~request'):
+            await client.send_typing(message.channel)
+            print(message.content[8:])
+            await client.send_message(discord.Object(id='channellid'), message.content[8:])
+            await client.send_message(message.channel, 'Request sent, be patient!')
+        ### still in the works
+        elif message.content.startswith('~Commands'):
             await client.send_typing(message.channel)
             client.send_message(message.content[3:])
         ###post pic from reddit, NSFW or SFW depending on below
@@ -111,6 +117,7 @@ async def on_message(message):
                     # dont remove ep pics
                     # os.remove(returnMessage)
             except Exception as e:
+                print(e)
                 await client.send_message(message.channel, ':shrug:')
         ###birb
         elif message.content.startswith('~birb'):
@@ -171,13 +178,13 @@ async def on_message(message):
                 except Exception as e:
                     await client.send_message(message.channel, ':shrug:')
         ###Tragedy indeed
-        elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, 'Would you like to hear a story?')
-            for line in TragedyIndeed :
-                await client.send_typing(message.channel)
-                await client.send_message(message.channel, line)
-                await asyncio.sleep(1)
+        #elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
+        #    await client.send_typing(message.channel)
+        #    await client.send_message(message.channel, 'Would you like to hear a story?')
+        #    for line in TragedyIndeed :
+        #        await client.send_typing(message.channel)
+        #        await client.send_message(message.channel, line)
+        #        await asyncio.sleep(1)
         ###Help command, list out all usable commands besides the random funny below
         elif message.content.startswith('~help'):
             await client.send_typing(message.channel)
@@ -193,16 +200,16 @@ async def on_message(message):
         elif 'jack sparrow' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, '***Captain*** Jack Sparrow')
-        elif 'love you' in message.content or 'love botName' in message.content or 'love this bot' in message.content:
+        elif 'love you' in message.content or 'love Sarina' in message.content or 'love this bot' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, 'Love you too')
-        elif 'bad bot' in message.content or 'bad botName' in message.content:
+        elif 'bad bot' in message.content or 'bad Sarina' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, "I'm sorry D:")
-        elif 'good bot' in message.content or 'good botName' in message.content:
+        elif 'good bot' in message.content or 'good Sarina' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, "Thanks :) <3")
-        elif 'thanks bot' in message.content or 'thanks botName' in message.content or 'thanks botName!' in message.content:
+        elif 'thanks bot' in message.content or 'thanks Sarina' in message.content or 'thanks Sarina!' in message.content:
             await client.send_typing(message.channel)
             await client.send_message(message.channel, "You're welcome :)")
 
@@ -221,10 +228,10 @@ def getSubredditPicture(subreddit="", nsfw=False):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth(appId, authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -250,7 +257,7 @@ def getSubredditPicture(subreddit="", nsfw=False):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:botName:v1'}
+                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/SFW/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -269,10 +276,10 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth(appId, authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -297,7 +304,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:botName:v1'}
+                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/SFW/' + subreddit + '/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -305,7 +312,7 @@ def getSubredditPictureSpecific(subreddit = '', nsfw=True):
                         replyMessage = 'imgs/SFW/' + subreddit + '/' + replyMessage
         return replyMessage
     except Exception as e:
-        print('Error in getSubredditPicture method:')
+        print('Error in getSubredditPictureSpecific method:')
         print(e)
         return ':shrug:'
 
@@ -318,11 +325,11 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth(appId, authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -348,7 +355,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:botName:v1'}
+                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/NSFW/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -356,7 +363,7 @@ def getSubredditPictureNSFW(subreddit="",nsfw=True):
                         replyMessage = 'imgs/NSFW/' + replyMessage
         return replyMessage   
     except Exception as e:
-        print('Error in getSubredditPicture method:')
+        print('Error in getSubredditPictureNSFW method:')
         print(e)
         return ':shrug:'
    ###for soem nsfw anime subs, saves img
@@ -367,10 +374,10 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
         if subreddit != '':
             client_auth = requests.auth.HTTPBasicAuth(appId, authToken)
             post_data = {'grant_type': 'client_credentials'}# post_data = {"grant_type": "password", "username": "reddit_bot", "password": "snoo"}
-            requestHeaders = {'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+            requestHeaders = {'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
             redditAuthResult = json.loads(requests.post("https://www.reddit.com/api/v1/access_token", auth=client_auth, data=post_data, headers=requestHeaders).text)
             if redditAuthResult['access_token']:
-                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:botName:v1 (by /u/redditUser)'}
+                requestHeaders2 = {'Authorization': 'bearer ' + redditAuthResult['access_token'], 'User-agent': 'linux:Sarina:v1 (by /u/redditusername)'}
                 maxReTries = 3
                 gettingPicture = True
                 while gettingPicture and maxReTries > 0:
@@ -395,7 +402,7 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
                         return replyMessage
                     else:
                         replyMessage = replyMessage.split('/')[-1]
-                        requestHeaders = {'User-agent': 'linux:botName:v1'}
+                        requestHeaders = {'User-agent': 'linux:Sarina:v1'}
                         imageResponse = requests.get(imageResponse, headers=requestHeaders, stream=True)
                         imageFile = open('imgs/NSFW/lewd/' + replyMessage, 'wb')
                         imageFile.write(imageResponse.content)
@@ -403,7 +410,7 @@ def getSubredditPictureLewd(subreddit = '', nsfw=True):
                         replyMessage = 'imgs/NSFW/lewd/' + replyMessage
         return replyMessage
     except Exception as e:
-        print('Error in getSubredditPicture method:')
+        print('Error in getSubredditPictureLewd method:')
         print(e)
         return ':shrug:'
 
@@ -417,8 +424,8 @@ TragedyIndeed = [' **The Senate** - Did you ever hear the Tragedy of Darth Plagu
 pathList = ['imgs/', 'imgs/NSFW', 'imgs/NSFW/lewd', 'imgs/SFW', 'imgs/SFW/earthporn', 'imgs/SFW/superbowl', 'imgs/SFW/awwnime', 'imgs/SFW/christmas', 'imgs/SFW/birb']
 
 # list of subreddits to choose from for random commands
-nsfwSubs = ['nsfw', 'realgirls', 'nsfw_gif', 'Blowjob', 'Blowjobs', 'blowjobsandwich', 'boobies', 'collegesluts', 'DillionHarper', 'dirtysmall', 'dreamjobs', 'festivalsluts', 'funsized', 'girlskissing', 'porninfifteenseconds','RemyLaCroix', 'RileyReid', 'xsome']
-lewd = ['ecchi', 'hentai', 'yuri']
+nsfwSubs = ['nsfw', 'realgirls', 'nsfw_gif', 'Blowjob', 'Blowjobs', 'blowjobsandwich', 'boobies', 'collegesluts', 'DillionHarper', 'dirtysmall', 'dreamjobs', 'festivalsluts', 'funsized', 'girlskissing', 'porninfifteenseconds','RemyLaCroix', 'RileyReid', 'xsome', 'legalteens']
+lewd = ['ecchi', 'hentai', 'yuri', 'nekomimi', 'efhentai', 'shoujoai', 'thelostwoods', 'cumhentai']
 
 # now lets run it
 client.run(token)
