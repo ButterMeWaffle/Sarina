@@ -1,3 +1,6 @@
+####
+## Import libraries
+####
 import discord
 from random import uniform
 import asyncio
@@ -10,6 +13,10 @@ import urllib.request
 import os
 from urllib.parse import urlparse
 from os.path import splitext
+
+####
+## Discord
+####
 
 token = "DiscordToken"
 
@@ -48,179 +55,179 @@ async def on_message(message):
     if not message.author.bot:
         ### send all request to the request channel
         if message.content.startswith('~request'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             await client.send_message(discord.Object(id='488822810647724032'), message.content[8:] + " -User- " + message.author.name)
-            await client.send_message(message.channel, 'Request sent, be patient!')
+            await message.channel.send('Request sent, be patient!')
         ### still in the works
         elif message.content.startswith('~commands'):
-            await client.send_typing(message.channel)
-            print(message.server)
-            if message.server.name == "SpaceBros":
-                print(message.server)
-                await client.send_message(message.channel, cmdList)
+            await message.channel.trigger_typing()
+            print(message.channel.name)
+            if message.guild.name == "SpaceBros":
+                print(message.guild.name)
+                await message.channel.send(cmdList)
             else:
-                await client.send_message(message.channel, cmdList_Twitch)
+                await message.channel.send(cmdList_Twitch)
         ###post pic from reddit, NSFW or SFW depending on below
         elif message.content.startswith('~r'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             if message.channel.name == "nsfw" or message.channel.name == "gayboys":
                 
                 returnMessage = getSubredditPictureNSFW(message.content[3:])
                 print(returnMessage)
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # remove pics
                     os.remove(returnMessage)
             else:
                 returnMessage = getSubredditPicture(message.content[3:])
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # remove pics
                     os.remove(returnMessage)
         ###owl attack
         elif message.content.startswith('~owl'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             try:
                 returnMessage = getSubredditPictureSpecific('superbowl')
                 print(returnMessage)
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # remove pics
                     os.remove(returnMessage)
             except Exception as e:
                 print(e)
-                await client.send_message(message.channel, ':shrug:')
+                await message.channel.send(':shrug:')
         ###awwnime
         elif message.content.startswith('~aww'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             try:
                 returnMessage = getSubredditPictureSpecific('awwnime')
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # dont remove aww pics
                     # os.remove(returnMessage)
             except Exception as e:
-                await client.send_message(message.channel, ':shrug:')
+                await message.channel.send(':shrug:')
         ###EarthPorn
         elif message.content.startswith('~ep'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             try:
                 returnMessage = getSubredditPictureSpecific('earthporn')
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # dont remove ep pics
                     # os.remove(returnMessage)
             except Exception as e:
                 print(e)
-                await client.send_message(message.channel, ':shrug:')
+                await message.channel.send(':shrug:')
         ###birb
         elif message.content.startswith('~birb'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             try:
                 returnMessage = getSubredditPictureSpecific('birb')
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # remove pics
                     os.remove(returnMessage)
             except Exception as e:
-                await client.send_message(message.channel, ':shrug:')
+                await message.channel.send(':shrug:')
         ###xmas / temp?
         elif message.content.startswith('~xmas'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             try:
                 returnMessage = getSubredditPictureSpecific('christmas')
                 if not returnMessage.startswith('imgs'):
-                    await client.send_message(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                 else: 
-                    await client.send_file(message.channel, returnMessage)
+                    await message.channel.send(file=discord.File(returnMessage))
                     # remove pics
                     os.remove(returnMessage)
             except Exception as e:
-                await client.send_message(message.channel, ':shrug:')
+                await message.channel.send(':shrug:')
         ###NSFW
         elif message.content.startswith('~nsfw'):
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             if message.channel.name == "nsfw":
                 try:
                     subreddit = nsfwSubs[random.randint(0, len(nsfwSubs))]
                     print(subreddit)
                     returnMessage = getSubredditPictureNSFW(subreddit)
                     if not returnMessage.startswith('imgs'):
-                        await client.send_message(message.channel, returnMessage)
+                        await message.channel.send(file=discord.File(returnMessage))
                     else: 
-                        await client.send_file(message.channel, returnMessage)
+                        await message.channel.send(file=discord.File(returnMessage))
                         # remove pics
                         os.remove(returnMessage)
                 except Exception as e:
-                    await client.send_message(message.channel, ':shrug:')
+                    await message.channel.send(':shrug:')
         elif message.content.startswith('~lewd'):
            
-            await client.send_typing(message.channel)
+            await message.channel.trigger_typing()
             if message.channel.name == "nsfw":
                 try:
                     subreddit = lewd[random.randint(0, len(lewd))]
                     print(subreddit)
                     returnMessage = getSubredditPictureLewd(subreddit)
                     if not returnMessage.startswith('imgs'):
-                        await client.send_message(message.channel, returnMessage)
+                        await message.channel.send(file=discord.File(returnMessage))
                     else: 
-                        await client.send_file(message.channel, returnMessage)
+                        await message.channel.send(file=discord.File(returnMessage))
                         # remove pics
                         os.remove(returnMessage)
                 except Exception as e:
-                    await client.send_message(message.channel, ':shrug:')
+                    await message.channel.send(':shrug:')
         ###Tragedy indeed
         #elif 'have you' in message.content or 'tragedy' in message.content or 'plagueis' in message.content or 'wise' in message.content or 'story' in message.content:
-        #    await client.send_typing(message.channel)
-        #    await client.send_message(message.channel, 'Would you like to hear a story?')
+        #    await message.channel.trigger_typing()
+        #    await message.channel.send('Would you like to hear a story?')
         #    for line in TragedyIndeed :
-        #        await client.send_typing(message.channel)
-        #        await client.send_message(message.channel, line)
+        #        await message.channel.trigger_typing()
+        #        await message.channel.send(line)
         #        await asyncio.sleep(1)
         ###Help command, list out all usable commands besides the random funny below
         elif message.content.startswith('~help'):
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, '--SFW commands-- \n    ~r subredditname  \n    ~owl (superbowl)  \n    ~birb (birb)  \n    ~aww (awwnime)  \n    ~ep  (earthporn)  \n    ~xmas  (christmaslights)\n\n')
-            await client.send_message(message.channel, '--NSFW commands-- \n    ~r subredditname  \n    ~lewd (variety/2D)  \n    ~nsfw (variety)')
+            await message.channel.trigger_typing()
+            await message.channel.send('--SFW commands-- \n    ~r subredditname  \n    ~owl (superbowl)  \n    ~birb (birb)  \n    ~aww (awwnime)  \n    ~ep  (earthporn)  \n    ~xmas  (christmaslights)\n\n')
+            await message.channel.send('--NSFW commands-- \n    ~r subredditname  \n    ~lewd (variety/2D)  \n    ~nsfw (variety)')
         ###Some random funny commands
         #elif 'test' in message.content:
-        #    await client.send_typing(message.channel)
-        #    await client.send_message(message.channel, 'TEST REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
+        #    await message.channel.trigger_typing()
+        #    await message.channel.send('TEST REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
         elif 'fuck you' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_file(message.channel, 'imgs/smug.jpg')
+            await message.channel.trigger_typing()
+            await message.channel.send('imgs/smug.jpg')
         elif 'jack sparrow' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, '***Captain*** Jack Sparrow')
+            await message.channel.trigger_typing()
+            await message.channel.send('***Captain*** Jack Sparrow')
         elif 'love you' in message.content or 'love BotName' in message.content or 'love this bot' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, 'Love you too')
+            await message.channel.trigger_typing()
+            await message.channel.send('Love you too')
         elif 'bad bot' in message.content or 'bad BotName' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, "I'm sorry D:")
+            await message.channel.trigger_typing()
+            await message.channel.send("I'm sorry D:")
         elif 'good bot' in message.content or 'good BotName' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, "Thanks :) <3")
+            await message.channel.trigger_typing()
+            await message.channel.send("Thanks :) <3")
         elif 'thanks bot' in message.content or 'thanks BotName' in message.content or 'thanks BotName!' in message.content:
-            await client.send_typing(message.channel)
-            await client.send_message(message.channel, "You're welcome :)")
+            await message.channel.trigger_typing()
+            await message.channel.send("You're welcome :)")
 
 
         ###for explosion
         #for line in random.choice(listOfChants):
-        #    await client.send_message(message.channel, line)
+        #    await message.channel.send(line)
         #    await asyncio.sleep(0.5)
 
 ###Get stuff from reddit, SFW and NSFW
@@ -437,3 +444,7 @@ cmdList_Twitch = 'Both - ~r subredditName SFW - ~owl, ~birb, ~ep, ~aww, ~xmas...
 
 # now lets run it
 client.run(token)
+
+####
+## Twitch
+####
